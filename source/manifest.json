@@ -1,0 +1,12 @@
+{
+	"name": "Weather Now",
+	"description": "A weather icon that shows the current weather conditions and a badge to show the current temperature.",
+	"version": "0.1",
+	"browser_action": {
+		"default_icon": "icon.png"
+	},
+	"background_page": "background.html",
+	"permissions": [
+		"http://*/"
+	]
+}

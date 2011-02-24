@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+		<title>Weather Now - Background</title>
+		<script src="jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" charset="utf-8">
+			$(document).ready(function() {
+				chrome.browserAction.setBadgeBackgroundColor({color: [0, 0, 0, 60]});
+				update_weather();
+			});
+			
+			/*
+				Function to get weather data from Yahoo and update the 
+				extension icon and the temperature.
+				
+				Recurive function - calls itself after a set interval so the weather
+				date is updated.
+			*/
+			
+			// Using Yahoo Weather Forecast API
+			
+			function update_weather() {
+				
+				base_url = "http://weather.yahooapis.com/forecastrss";
+				url = base_url + "?w=2502265";
+				url = url + "&random=" + new Date().getTime();
+				$.get(url, function(response_xml) {
+					
+					// Extract and set the temperature as the badge text
+					var temp = $(response_xml).find('[nodeName=yweather\\:condition]').attr('temp');
+					chrome.browserAction.setBadgeText({text: temp});
+					
+					// Get image url and set the browser action icon
+					var weather_code = $(response_xml).find('[nodeName=yweather\\:condition]').attr('code');
+					var image_base_url = "http://l.yimg.com/a/i/us/we/52/";
+					var image_url = image_base_url + weather_code + ".gif";
+					chrome.browserAction.setIcon({path: image_url});
+				});
+				
+				setTimeout(update_weather, 5*60*1000);
+				
+			}
+			
+		</script>
+	</head>
+</html>
